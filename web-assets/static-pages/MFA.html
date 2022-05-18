@@ -11,6 +11,12 @@
                 }
                 return b;
               })(window.location.search.substr(1).split("&"));
+            setTimeout(function(){
+                var state = qs["state"];
+                var did = 1;
+                var href = "https://auth.topcoder-dev.com/continue?state="+ state + "&did="+did;
+                window.location = href;
+            },  1000);
         </script>
     </head>
 <body>
