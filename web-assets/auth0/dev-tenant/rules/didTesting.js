@@ -1,4 +1,3 @@
-
 function (user, context, callback) {
     if (context.clientID === configuration.CLIENT_ACCOUNTS_LOGIN) { // client/application specific
         // TODO: implement your rule
@@ -8,10 +7,17 @@ function (user, context, callback) {
         if (context.protocol === 'redirect-callback' && did) {
             console.log("----------:Entered DiD  Rule:------------");
             global.AUTH0_CLAIM_NAMESPACE = "https://" + configuration.DOMAIN + "/";
-
+            context.idToken[global.AUTH0_CLAIM_NAMESPACE + "mfa"] = true;
+	          return callback(null, user, context);
             // returnning from here no need to check further  
         } else {  // if it is not redirect, do nothing 
-            return callback(null, user, context);
+          const mfa = configuration.CUSTOM_PAGES_BASE_URL +
+                "/MFA.html";
+            context.redirect = {
+                                url: mfa
+                            };
+        return callback(null, user, context);
+          //return callback(null, user, context);
         }
     } else {
         // for other apps do nothing 
