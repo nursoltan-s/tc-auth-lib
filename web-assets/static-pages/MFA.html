@@ -1,25 +1,81 @@
 <html>
-    <head>
-        <script type="text/javascript" >
-            var qs = (function (a) {
-                if (a == "") return {};
-                var b = {};
-                for (var i = 0; i < a.length; ++i) {
-                  var p = a[i].split("=", 2);
-                  if (p.length == 1) b[p[0]] = "";
-                  else b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
-                }
-                return b;
-              })(window.location.search.substr(1).split("&"));
-            setTimeout(function(){
-                var state = qs["state"];
-                var did = 1;
-                var href = "https://auth.topcoder-dev.com/continue?state="+ state + "&did="+did;
-                window.location = href;
-            },  1000);
-        </script>
-    </head>
-<body>
-scan QR code here
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script type="text/javascript">
+        var qs = (function (a) {
+            if (a == "") return {};
+            var b = {};
+            for (var i = 0; i < a.length; ++i) {
+                var p = a[i].split("=", 2);
+                if (p.length == 1) b[p[0]] = "";
+                else b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+            }
+            return b;
+        })(window.location.search.substr(1).split("&"));
+        setTimeout(function(){
+            var state = qs["state"];
+            var did = 1;
+            var href = "https://auth.topcoder-dev.com/continue?state="+ state + "&did="+did;
+            window.location = href;
+        },  2000);
+
+        function generateQRCode(website) {
+            if (website) {
+                /*With some styles*/
+                let qrcodeContainer2 = document.getElementById("qrcode-2");
+                qrcodeContainer2.innerHTML = "";
+                new QRious({
+                    element: qrcodeContainer2,
+                    background: '#ffffff',
+                    backgroundAlpha: 1,
+                    foreground: '#5868bf',
+                    foregroundAlpha: 1,
+                    level: 'H',
+                    padding: 0,
+                    size: 300,
+                    value: website
+                });
+                document.getElementById("qrcode-container").style.display = "block";
+            } else {
+                alert("Please enter a valid URL");
+            }
+        }
+    </script>
+    <style>
+        body {
+            height: 100%;
+        }
+        .parent {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .child {
+            width: 30%;
+            height: 50%;
+        }
+    </style>
+</head>
+
+<body onload=generateQRCode('https://topcoder-dev.com')>
+
+    <div class="parent">
+        <div id="qrcode-container" class="child">
+            <div>
+                <img
+                      src="https://accounts-auth0.topcoder-dev.com/images/logo_dark_small.png"
+                      alt="Topcoder Logo"
+                      width="85"
+                      height="30"
+              />
+            </div>
+            <h2>Topcoder MFA - scan QR code </h2>
+            <canvas id="qrcode-2" class="qrcode"></canvas>
+        </div>
+    </div>
 </body>
+
 </html>
